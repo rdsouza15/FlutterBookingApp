@@ -31,12 +31,31 @@ class MyApp extends StatefulWidget {
 
 /// This is the controller for the Main app view
 class _MyAppState extends State<MyApp> {
-  GoogleMapController mapController;
 
-  final LatLng _center = const LatLng(45.521563, -122.677433);
+  // init tree map
+  final Map<String, Marker> _markers = {};
 
-  void _onMapCreated(GoogleMapController controller) {
-    mapController = controller;
+  Future<void> _onMapCreated( GoogleMapController controller ) async {
+    final googleOffices = await locations.getGoogleOffices();
+
+    setState( () {
+      _markers.clear();
+
+      for( final office in googleOffices.offices ){
+        final marker = Marker(
+          markerId: MarkerId( office.name ),
+          position: LatLng( office.lat, office.lng ),
+          infoWindow: InfoWindow(
+            title: office.name,
+            snippet: office.address,
+          ),
+        );
+
+        _markers[office.name] = marker;
+
+      }
+    });
+
   }
 
   @override
@@ -44,15 +63,16 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Maps Sample App'),
+          title: const Text('Google Office Locations'),
           backgroundColor: Colors.green[700],
         ),
         body: GoogleMap(
           onMapCreated: _onMapCreated,
           initialCameraPosition: CameraPosition(
-            target: _center,
-            zoom: 11.0,
+            target: const LatLng(0, 0),
+            zoom: 2,
           ),
+          markers: _markers.values.toSet(),
         ),
       ),
     );
