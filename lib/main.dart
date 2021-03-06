@@ -9,6 +9,9 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 /* import map locations */
 import 'src/locations.dart' as locations;
 
+/* import HomePage */
+import 'home.dart';
+
 /* Main entry point into app */
 void main() => runApp(MyApp());
 
@@ -61,20 +64,22 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Google Office Locations'),
-          backgroundColor: Colors.green[700],
-        ),
-        body: GoogleMap(
-          onMapCreated: _onMapCreated,
-          initialCameraPosition: CameraPosition(
-            target: const LatLng(0, 0),
-            zoom: 2,
-          ),
-          markers: _markers.values.toSet(),
-        ),
-      ),
+      home: HomePage(),
+
+        // Scaffold(
+      //   appBar: AppBar(
+      //     title: const Text('Google Office Locations'),
+      //     backgroundColor: Colors.green[700],
+      //   ),
+      //   body: GoogleMap(
+      //     onMapCreated: _onMapCreated,
+      //     initialCameraPosition: CameraPosition(
+      //       target: const LatLng(0, 0),
+      //       zoom: 2,
+      //     ),
+      //     markers: _markers.values.toSet(),
+      //   ),
+      // ),
     );
   }
 }
