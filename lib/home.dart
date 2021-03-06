@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -85,8 +87,10 @@ class HomePage extends StatelessWidget {
                   initialCameraPosition: CameraPosition(
                     target: const LatLng(0, 0),
                     zoom: 2),
-                  )
+                  gestureRecognizers: Set()
+                      ..add(Factory<PanGestureRecognizer>(() => PanGestureRecognizer() ) )
                 )
+              )
             ] ),
     );
             // children: _buildGridCards(10)));
