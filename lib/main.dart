@@ -64,74 +64,15 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme:
+          ThemeData(
+            primaryColor: Color( 0xFF3EBACE ),
+            accentColor: Color( 0xFFD8ECF1 ),
+            scaffoldBackgroundColor: Color( 0xFFF3F5F7 )
+          ),
       home: HomePage(),
 
-        // Scaffold(
-      //   appBar: AppBar(
-      //     title: const Text('Google Office Locations'),
-      //     backgroundColor: Colors.green[700],
-      //   ),
-      //   body: GoogleMap(
-      //     onMapCreated: _onMapCreated,
-      //     initialCameraPosition: CameraPosition(
-      //       target: const LatLng(0, 0),
-      //       zoom: 2,
-      //     ),
-      //     markers: _markers.values.toSet(),
-      //   ),
-      // ),
-    );
-  }
-}
-/* A Widget for displaying RandomWords */
-class RandomWords extends StatefulWidget {
-  @override
-  _RandomWordsState createState() => _RandomWordsState();
-}
 
-/* The controller for the RandomWords view */
-class _RandomWordsState extends State<RandomWords> {
-
-  // ListView
-  final _suggestions = <WordPair>[];
-  final _biggerFont = TextStyle(fontSize: 18.0);
-
-  @override
-  Widget build(BuildContext context) {
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Startup Name Generator'),
-      ),
-      body: _buildSuggestions(),
-    );
-  }
-
-  /* Function to build word suggestions */
-  Widget _buildSuggestions(){
-    return ListView.builder(
-        padding: EdgeInsets.all(16.0),
-        itemBuilder: /*1*/ (context, i) {
-          if( i.isOdd ) return Divider(); /*2*/
-
-          final index = i ~/ 2; /*3*/
-
-          if( index >= _suggestions.length ){
-            _suggestions.addAll( generateWordPairs().take( 10 ) );
-          }
-
-          return _buildRow( _suggestions[index] );
-        },
-    );
-  }
-
-  /* Function to build out a row */
-  Widget _buildRow( WordPair pair ){
-    return ListTile(
-      title: Text(
-        pair.asPascalCase,
-        style: _biggerFont,
-      ),
     );
   }
 }
