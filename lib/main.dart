@@ -67,7 +67,7 @@ class _MyAppState extends State<MyApp> {
       theme:
           ThemeData(
             primaryColor: Color( 0xFF3EBACE ),
-            accentColor: Color( 0xFFD8ECF1 ),
+            accentColor: Color( 0xFFFFC05F ),
             scaffoldBackgroundColor: Color( 0xFFF3F5F7 )
           ),
       home: HomePage(),

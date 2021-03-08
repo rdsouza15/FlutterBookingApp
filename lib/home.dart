@@ -5,11 +5,14 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+// Import clinic model
+import 'package:flutter_app/models/clinics_model.dart';
+
 /* import map locations */
 import 'src/locations.dart' as locations;
 
+/* TODO MAKE THIS A STATEFUL WIDGET */
 class HomePage extends StatelessWidget {
-
   //For viewing and controlling a calendar
   CalendarController _controller;
 
@@ -21,202 +24,414 @@ class HomePage extends StatelessWidget {
     FontAwesomeIcons.running,
   ];
 
+  // For Physio Clinics
+  // TODO move this to its own class
+  // var clinics = ['Kevin', 'Christina', 'Rosanne', 'Sante'];
+
   /* TODO fix this later.. for now set the current index to 1 */
   int _selectedIndex = 1;
 
-  Widget _buildIcon( int index, BuildContext context ){
+  Widget _buildIcon(int index, BuildContext context) {
     return GestureDetector(
         child: Container(
-          height: 60.0,
-          width: 60.0,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(30.0),
-          ),
-        child: Icon(
-          _icons[index],
-          size: 25.0,
-          color: _selectedIndex == index
-              ? Theme.of(context).primaryColor
-              : Color(0xFFB4C1C4),
-        )
-      )
-    );
-  }
-
-  List<Card> _buildGridCards(int count) {
-    List<Card> cards = List.generate(
-      count,
-          (int index) => Card(
-        clipBehavior: Clip.antiAlias,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            AspectRatio(
-              aspectRatio: 18.0 / 11.0,
-              child: Image.asset('assets/diamond.png'),
+            height: 60.0,
+            width: 60.0,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(30.0),
             ),
-            Padding(
-              padding: EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text('Title'),
-                  SizedBox(height: 8.0),
-                  Text('Secondary Text'),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-
-    return cards;
+            child: Icon(
+              _icons[index],
+              size: 25.0,
+              color: _selectedIndex == index
+                  ? Theme.of(context).primaryColor
+                  : Color(0xFFB4C1C4),
+            )));
   }
-
 
   // init tree map
   final Map<String, Marker> _markers = {};
 
-  Future<void> _onMapCreated( GoogleMapController controller ) async {
+  Future<void> _onMapCreated(GoogleMapController controller) async {
     final googleOffices = await locations.getGoogleOffices();
 
     // setState( () {
-      _markers.clear();
+    _markers.clear();
 
-      for( final office in googleOffices.offices ){
-        final marker = Marker(
-          markerId: MarkerId( office.name ),
-          position: LatLng( office.lat, office.lng ),
-          infoWindow: InfoWindow(
-            title: office.name,
-            snippet: office.address,
-          ),
-        );
+    for (final office in googleOffices.offices) {
+      final marker = Marker(
+        markerId: MarkerId(office.name),
+        position: LatLng(office.lat, office.lng),
+        infoWindow: InfoWindow(
+          title: office.name,
+          snippet: office.address,
+        ),
+      );
 
-        _markers[office.name] = marker;
-      }
+      _markers[office.name] = marker;
     }
-
-  /* Get the locations for map async */
-  Future<void>_buildCardMap() async {
-    final googleOffices = await locations.getGoogleOffices();
-
-
   }
 
+  /* Get the locations for map async */
+  Future<void> _buildCardMap() async {
+    final googleOffices = await locations.getGoogleOffices();
+  }
 
   @override
   Widget build(BuildContext context) {
-
     // /* TODO how can we init stuff in a stateless class ?? */
     // Initialize CalendarController before using
-    _controller = CalendarController();
+    _controller ??= CalendarController();
 
     return Scaffold(
         body: SafeArea(
           child: ListView(
-            // physics: const AlwaysScrollableScrollPhysics(),
-            // crossAxisCount: 1,
-            padding: EdgeInsets.all(10.0),
-            // childAspectRatio: 8.0 / 9.0,
-            children: [
-              Padding(
-                padding: EdgeInsets.only( left: 20.0, right: 100.0 ),
-                child: Text(
-                  "Please choose a service near you",
-                  style: TextStyle(
-                    fontSize: 30.0,
-                    fontWeight: FontWeight.bold,
+              // physics: const AlwaysScrollableScrollPhysics(),
+              // crossAxisCount: 1,
+              padding: EdgeInsets.all(10.0),
+              // childAspectRatio: 8.0 / 9.0,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(left: 20.0, right: 100.0),
+                  child: Text(
+                    "Please choose a service near you",
+                    style: TextStyle(
+                      fontSize: 30.0,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
-              ),
-              SizedBox( height: 20.0 ), // Padding between Text and Map
-              SizedBox(
-                width: 100,
-                height: 500,
-                child: GoogleMap(
-                  mapType: MapType.normal,
-                  initialCameraPosition: CameraPosition(
-                    target: const LatLng( 43.71889356929494, -79.72247294477522 ),
-                    zoom: 2),
-                  gestureRecognizers: Set()
-                      ..add(Factory<PanGestureRecognizer>(() => PanGestureRecognizer() ) )
-                )
-              ), // Sized Box For Map
-              SizedBox( height: 10.0 ), // Padding between map and service icon
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: _icons.asMap().entries.map((MapEntry map) => _buildIcon(map.key, context) ).toList(),
-              ),
-              SizedBox( height: 10.0 ), // Padding between map and service icon
-              TableCalendar(
+                SizedBox(height: 20.0), // Padding between Text and Map
+                // TODO fix the logic of the color of the selected buttons
+                Container(
+                  height: 180.0,
+                  child: GridView.count(
+                      crossAxisCount: 2,
+                      childAspectRatio: 2.5,
+                      padding: const EdgeInsets.all(10.0),
+                      mainAxisSpacing: 10.0,
+                      crossAxisSpacing: 10.0,
+                      children: <Widget>[
+                        FlatButton(
+                          color: Colors.orange,
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 50.0, vertical: 20.0),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                            side: BorderSide(
+                              color: _selectedIndex == 1
+                                  ? Colors.transparent
+                                  : Color(
+                                  0xFFFFC05F), // TODO fix this with stateful widget
+                            ),
+                          ),
+                          // color: _selectedIndex == 0 ? Color(0xFFFFC05F) : null,
+                          child: Text("Physio",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 20.0,
+                                fontWeight: FontWeight.w600,
+                              )),
+                          onPressed: () {
+                            _selectedIndex = 0;
+                          },
+                        ),
+                        FlatButton(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 50.0, vertical: 20.0),
+                          color: Color(0xFFFFC05F),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                            side: BorderSide(
+                              color: _selectedIndex == 1
+                                  ? Colors.transparent
+                                  : Color(
+                                  0xFFFFC05F), // TODO fix this with stateful widget
+                            ),
+                          ),
+                          // color: _selectedIndex == 0 ? Color(0xFFFFC05F) : null,
+                          child: Text("Speech",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 20.0,
+                                fontWeight: FontWeight.w600,
+                              )),
+                          onPressed: () {
+                            _selectedIndex = 0;
+                          },
+                        ),
+                        FlatButton(
+                          color: Color(0xFFFFC05F),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 30.0, vertical: 20.0),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                            side: BorderSide(
+                              color: _selectedIndex == 1
+                                  ? Colors.transparent
+                                  : Color(
+                                  0xFFFFC05F), // TODO fix this with stateful widget
+                            ),
+                          ),
+                          // color: _selectedIndex == 0 ? Color(0xFFFFC05F) : null,
+                          child: Text("Massage",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 20.0,
+                                fontWeight: FontWeight.w600,
+                              )),
+                          onPressed: () {
+                            _selectedIndex = 0;
+                          },
+                        ),
+                        FlatButton(
+                          color: Color(0xFFFFC05F),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 50.0, vertical: 20.0),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                            side: BorderSide(
+                              color: _selectedIndex == 1
+                                  ? Colors.transparent
+                                  : Color(
+                                  0xFFFFC05F), // TODO fix this with stateful widget
+                            ),
+                          ),
+                          // color: _selectedIndex == 0 ? Color(0xFFFFC05F) : null,
+                          child: Text("PSW",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 20.0,
+                                fontWeight: FontWeight.w600,
+                              )),
+                          onPressed: () {
+                            _selectedIndex = 0;
+                          },
+                        ),
+                      ],
+                  )
+                ),
+                TextField(
+                  decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: "Where",
+                      icon: Container(
+                          width: 50.0,
+                          height: 50.0,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20.0),
+                            color: Color(0xFFEEF8FF),
+                          ),
+                          child: Icon(
+                            Icons.location_on,
+                            size: 25.0,
+                            color: Color(0xFF309DF1),
+                          ))),
+                ),
+                Divider(height: 40.0),
+                TextField(
+                  decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: "Appointment Date",
+                      icon: Container(
+                          width: 50.0,
+                          height: 50.0,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20.0),
+                            color: Color(0xFFEEF8FF),
+                          ),
+                          child: Icon(
+                            Icons.calendar_today,
+                            size: 25.0,
+                            color: Color(0xFF309DF1),
+                          ))),
+                ),
+                Divider(height: 40.0),
+                SizedBox(
+                    width: 100,
+                    height: 500,
+                    child: GoogleMap(
+                        mapType: MapType.normal,
+                        initialCameraPosition: CameraPosition(
+                            target: const LatLng(
+                                43.71889356929494, -79.72247294477522),
+                            zoom: 2),
+                        gestureRecognizers: Set()
+                          ..add(Factory<PanGestureRecognizer>(() =>
+                              PanGestureRecognizer())))), // Sized Box For Map
+                SizedBox(height: 10.0), // Padding between map and service icon
+                Divider(height: 40.0),
+                Container(
+                    height: 300.0,
+                    color: Colors.white10,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: clinics.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        // get instance of a Clinic at the index
+                        Clinic clinic = clinics[index];
+
+                        // return the clinic info to screen
+                        return Container(
+                            margin: EdgeInsets.all(10.0),
+                            width: 210.0,
+                            child: Stack(
+                              alignment: Alignment.topCenter,
+                              children: <Widget>[
+                                Positioned(
+                                    bottom: 15.0,
+                                    child: Container(
+                                      height: 120.0,
+                                      width: 200.0,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                      ),
+                                      child: Padding(
+                                        padding: EdgeInsets.all(8.0),
+                                        child: Column(
+                                            mainAxisAlignment: MainAxisAlignment.end,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                            Text(
+                                              clinic.person,
+                                              style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 20.0,
+                                              fontWeight: FontWeight.w600,
+                                              letterSpacing: 1.2,
+                                            ),
+                                          ),
+                                          Text(
+                                            clinic.description,
+                                            style: TextStyle(
+                                            color: Colors.black26,
+                                            fontSize: 20.0,
+                                            fontWeight: FontWeight.w600,
+                                            letterSpacing: 1.2,
+                                            ),
+                                          ),
+                                        ]),
+                                      ),
+                                    )),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(20.0),
+                                    boxShadow: [
+                                      BoxShadow(
+                                          color: Colors.black26,
+                                          offset: Offset(0.0, 2.0),
+                                          blurRadius: 6.0)
+                                    ],
+                                  ),
+                                  child: Stack(
+                                    children: <Widget>[
+                                      ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(20.0),
+                                          child: Image(
+                                            height: 180.0,
+                                            width: 180.0,
+                                            image: AssetImage(clinic.imageUrl),
+                                            fit: BoxFit.cover,
+                                          )
+                                      ),
+                                      Positioned(
+                                        left: 10.0,
+                                        bottom: 10.0,
+                                        child: Column( children: <Widget>[
+                                          Text(
+                                            clinic.city,
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 20.0,
+                                              fontWeight: FontWeight.w600,
+                                              letterSpacing: 1.2,
+                                            ),
+                                          ),
+                                          Row(
+                                            children: <Widget>[
+                                            Icon(
+                                              FontAwesomeIcons.locationArrow,
+                                              size: 10.0,
+                                              color: Colors.black,
+                                            ),
+                                            SizedBox( width: 5.0 ),
+                                            Text(
+                                              clinic.country,
+                                              style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 20.0,
+                                              fontWeight: FontWeight.w600,
+                                              letterSpacing: 1.2,)
+                                            ),
+                                          ],
+                                        )
+                                        ] ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ));
+                      },
+                    )),
+                TableCalendar(
                   initialCalendarFormat: CalendarFormat.month,
                   calendarStyle: CalendarStyle(
                       todayColor: Colors.blue,
                       selectedColor: Theme.of(context).primaryColor,
                       todayStyle: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 22.0,
-                        color: Colors.white
-                      )
-                  ),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 22.0,
+                          color: Colors.white)),
                   headerStyle: HeaderStyle(
                     centerHeaderTitle: true,
-                    formatButtonTextStyle: TextStyle( color: Colors.white ),
+                    formatButtonTextStyle: TextStyle(color: Colors.white),
                     formatButtonShowsNext: false,
                   ),
                   startingDayOfWeek: StartingDayOfWeek.monday,
-
                   builders: CalendarBuilders(
-                    selectedDayBuilder: (context, date, events ) => Container(
-                      margin: const EdgeInsets.all(5.0),
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).primaryColor,
-                        borderRadius: BorderRadius.circular(8.0) ),
-                      child: Text(
-                        date.day.toString(),
-                        style: TextStyle( color: Colors.white ),
-                      ),
-                      ),
-                    todayDayBuilder: (context,date,events) => Container(
-                      margin: const EdgeInsets.all(5.0),
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: Colors.blue,
-                        borderRadius: BorderRadius.circular(8.0)
-                      ),
-                      child: Text(
-                        date.day.toString(),
-                        style: TextStyle(
-                          color: Colors.white ),
-                      )
-                    )
-                  ),
-                calendarController: _controller,
-              )
-            ] ),
+                      selectedDayBuilder: (context, date, events) => Container(
+                            margin: const EdgeInsets.all(5.0),
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                                color: Theme.of(context).primaryColor,
+                                borderRadius: BorderRadius.circular(8.0)),
+                            child: Text(
+                              date.day.toString(),
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                      todayDayBuilder: (context, date, events) => Container(
+                          margin: const EdgeInsets.all(5.0),
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                              color: Colors.blue,
+                              borderRadius: BorderRadius.circular(8.0)),
+                          child: Text(
+                            date.day.toString(),
+                            style: TextStyle(color: Colors.white),
+                          ))),
+                  calendarController: _controller,
+                )
+              ]),
         ),
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: 0,
-          items: [
-            BottomNavigationBarItem(
+        bottomNavigationBar: BottomNavigationBar(currentIndex: 0, items: [
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.search,
+              size: 30.0,
+            ),
+            title: SizedBox.shrink(),
+          ),
+          BottomNavigationBarItem(
               icon: Icon(
-                Icons.search,
-                size:30.0,
+                Icons.local_pizza,
+                size: 30.0,
               ),
-              title: SizedBox.shrink(),
-            ),
-            BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.local_pizza,
-                  size: 30.0,
-                ),
-            title: SizedBox.shrink()
-            ),
-          ]
-    )
-    );
+              title: SizedBox.shrink()),
+        ]));
   }
 }
