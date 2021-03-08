@@ -2,14 +2,70 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:table_calendar/table_calendar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+//import Calendar
+import 'package:syncfusion_flutter_calendar/calendar.dart';
+
 
 // Import clinic model
 import 'package:flutter_app/models/clinics_model.dart';
 
 /* import map locations */
 import 'src/locations.dart' as locations;
+
+class MeetingDataSource extends CalendarDataSource {
+  MeetingDataSource(List<Meeting> source){
+    appointments = source;
+  }
+
+  @override
+  DateTime getStartTime(int index) {
+    return appointments[index].from;
+  }
+
+  @override
+  DateTime getEndTime(int index) {
+    return appointments[index].to;
+  }
+
+  @override
+  String getSubject(int index) {
+    return appointments[index].eventName;
+  }
+
+  @override
+  Color getColor(int index) {
+    return appointments[index].background;
+  }
+
+  @override
+  bool isAllDay(int index) {
+    return appointments[index].isAllDay;
+  }
+}
+
+class Meeting {
+  Meeting(this.eventName, this.from, this.to, this.background, this.isAllDay);
+
+  String eventName;
+  DateTime from;
+  DateTime to;
+  Color background;
+  bool isAllDay;
+}
+
+/* Create a Data Source to get Meetings from */
+List<Meeting> _getDataSource() {
+  List<Meeting> meetings = <Meeting>[];
+  final DateTime today = DateTime.now();
+  final DateTime startTime = DateTime(today.year, today.month, today.day, 9, 0, 0);
+  final DateTime endTime = startTime.add(const Duration(hours: 2));
+  meetings.add(
+      Meeting( 'Conference', startTime, endTime, const Color(0xFF0F8644), false)
+  );
+  return meetings;
+}
 
 /* TODO MAKE THIS A STATEFUL WIDGET */
 class HomePage extends StatelessWidget {
@@ -422,45 +478,12 @@ class HomePage extends StatelessWidget {
                   ],
                 ),
                 SizedBox( height: 10.0, ),
-                TableCalendar(
-                  initialCalendarFormat: CalendarFormat.month,
-                  calendarStyle: CalendarStyle(
-                      todayColor: Colors.blue,
-                      selectedColor: Theme.of(context).primaryColor,
-                      todayStyle: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 22.0,
-                          color: Colors.white)),
-                  headerStyle: HeaderStyle(
-                    centerHeaderTitle: true,
-                    formatButtonTextStyle: TextStyle(color: Colors.white),
-                    formatButtonShowsNext: false,
+                SfCalendar(
+                  view: CalendarView.week,
+                  dataSource: MeetingDataSource( _getDataSource() ),
+                  monthViewSettings: MonthViewSettings(
+                    appointmentDisplayMode: MonthAppointmentDisplayMode.appointment ),
                   ),
-                  startingDayOfWeek: StartingDayOfWeek.monday,
-                  builders: CalendarBuilders(
-                      selectedDayBuilder: (context, date, events) => Container(
-                            margin: const EdgeInsets.all(5.0),
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                                color: Theme.of(context).primaryColor,
-                                borderRadius: BorderRadius.circular(8.0)),
-                            child: Text(
-                              date.day.toString(),
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                      todayDayBuilder: (context, date, events) => Container(
-                          margin: const EdgeInsets.all(5.0),
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                              color: Colors.blue,
-                              borderRadius: BorderRadius.circular(8.0)),
-                          child: Text(
-                            date.day.toString(),
-                            style: TextStyle(color: Colors.white),
-                          ))),
-                  calendarController: _controller,
-                )
               ]),
         ),
         bottomNavigationBar: BottomNavigationBar(currentIndex: 0, items: [
