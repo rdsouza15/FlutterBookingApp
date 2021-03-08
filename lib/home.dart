@@ -103,8 +103,8 @@ class HomePage extends StatelessWidget {
                 SizedBox(height: 20.0), // Padding between Text and Map
                 // TODO fix the logic of the color of the selected buttons
                 Container(
-                  height: 180.0,
-                  child: GridView.count(
+                    height: 180.0,
+                    child: GridView.count(
                       crossAxisCount: 2,
                       childAspectRatio: 2.5,
                       padding: const EdgeInsets.all(10.0),
@@ -121,7 +121,7 @@ class HomePage extends StatelessWidget {
                               color: _selectedIndex == 1
                                   ? Colors.transparent
                                   : Color(
-                                  0xFFFFC05F), // TODO fix this with stateful widget
+                                      0xFFFFC05F), // TODO fix this with stateful widget
                             ),
                           ),
                           // color: _selectedIndex == 0 ? Color(0xFFFFC05F) : null,
@@ -145,7 +145,7 @@ class HomePage extends StatelessWidget {
                               color: _selectedIndex == 1
                                   ? Colors.transparent
                                   : Color(
-                                  0xFFFFC05F), // TODO fix this with stateful widget
+                                      0xFFFFC05F), // TODO fix this with stateful widget
                             ),
                           ),
                           // color: _selectedIndex == 0 ? Color(0xFFFFC05F) : null,
@@ -169,7 +169,7 @@ class HomePage extends StatelessWidget {
                               color: _selectedIndex == 1
                                   ? Colors.transparent
                                   : Color(
-                                  0xFFFFC05F), // TODO fix this with stateful widget
+                                      0xFFFFC05F), // TODO fix this with stateful widget
                             ),
                           ),
                           // color: _selectedIndex == 0 ? Color(0xFFFFC05F) : null,
@@ -193,7 +193,7 @@ class HomePage extends StatelessWidget {
                               color: _selectedIndex == 1
                                   ? Colors.transparent
                                   : Color(
-                                  0xFFFFC05F), // TODO fix this with stateful widget
+                                      0xFFFFC05F), // TODO fix this with stateful widget
                             ),
                           ),
                           // color: _selectedIndex == 0 ? Color(0xFFFFC05F) : null,
@@ -208,8 +208,7 @@ class HomePage extends StatelessWidget {
                           },
                         ),
                       ],
-                  )
-                ),
+                    )),
                 TextField(
                   decoration: InputDecoration(
                       border: InputBorder.none,
@@ -262,7 +261,11 @@ class HomePage extends StatelessWidget {
                 Divider(height: 40.0),
                 Container(
                     height: 300.0,
-                    color: Colors.white10,
+                    // color: Colors.white10,
+                    decoration: BoxDecoration(
+                      border: Border.all( color: Colors.orangeAccent ),
+                      borderRadius: BorderRadius.all( Radius.circular(5.0) )
+                    ),
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       itemCount: clinics.length,
@@ -290,28 +293,30 @@ class HomePage extends StatelessWidget {
                                       child: Padding(
                                         padding: EdgeInsets.all(8.0),
                                         child: Column(
-                                            mainAxisAlignment: MainAxisAlignment.end,
-                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: <Widget>[
-                                            Text(
-                                              clinic.person,
-                                              style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 20.0,
-                                              fontWeight: FontWeight.w600,
-                                              letterSpacing: 1.2,
-                                            ),
-                                          ),
-                                          Text(
-                                            clinic.description,
-                                            style: TextStyle(
-                                            color: Colors.black26,
-                                            fontSize: 20.0,
-                                            fontWeight: FontWeight.w600,
-                                            letterSpacing: 1.2,
-                                            ),
-                                          ),
-                                        ]),
+                                              Text(
+                                                clinic.person,
+                                                style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 20.0,
+                                                  fontWeight: FontWeight.w600,
+                                                  letterSpacing: 1.2,
+                                                ),
+                                              ),
+                                              Text(
+                                                clinic.description,
+                                                style: TextStyle(
+                                                  color: Colors.black26,
+                                                  fontSize: 20.0,
+                                                  fontWeight: FontWeight.w600,
+                                                  letterSpacing: 1.2,
+                                                ),
+                                              ),
+                                            ]),
                                       ),
                                     )),
                                 Container(
@@ -335,12 +340,11 @@ class HomePage extends StatelessWidget {
                                             width: 180.0,
                                             image: AssetImage(clinic.imageUrl),
                                             fit: BoxFit.cover,
-                                          )
-                                      ),
+                                          )),
                                       Positioned(
                                         left: 10.0,
                                         bottom: 10.0,
-                                        child: Column( children: <Widget>[
+                                        child: Column(children: <Widget>[
                                           Text(
                                             clinic.city,
                                             style: TextStyle(
@@ -352,23 +356,22 @@ class HomePage extends StatelessWidget {
                                           ),
                                           Row(
                                             children: <Widget>[
-                                            Icon(
-                                              FontAwesomeIcons.locationArrow,
-                                              size: 10.0,
-                                              color: Colors.black,
-                                            ),
-                                            SizedBox( width: 5.0 ),
-                                            Text(
-                                              clinic.country,
-                                              style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 20.0,
-                                              fontWeight: FontWeight.w600,
-                                              letterSpacing: 1.2,)
-                                            ),
-                                          ],
-                                        )
-                                        ] ),
+                                              Icon(
+                                                FontAwesomeIcons.locationArrow,
+                                                size: 10.0,
+                                                color: Colors.black,
+                                              ),
+                                              SizedBox(width: 5.0),
+                                              Text(clinic.country,
+                                                  style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 20.0,
+                                                    fontWeight: FontWeight.w600,
+                                                    letterSpacing: 1.2,
+                                                  )),
+                                            ],
+                                          )
+                                        ]),
                                       ),
                                     ],
                                   ),
@@ -377,6 +380,48 @@ class HomePage extends StatelessWidget {
                             ));
                       },
                     )),
+                SizedBox( height: 10.0, ),
+                Row(
+
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: <Widget>[
+                    FlatButton(
+                      minWidth: 175.0,
+                      color: Colors.orange,
+                      padding: EdgeInsets.symmetric(
+                         horizontal: 50.0, vertical: 20.0),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                      ),
+                      onPressed: () {},
+                      child: Text( 'Book',
+                        style: TextStyle(
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                    SizedBox( width: 10.0, ),
+                    FlatButton(
+                      minWidth: 175.0,
+                      color: Colors.orange,
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 50.0, vertical: 20.0),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        onPressed: () {},
+                        child: Text( 'Chat',
+                          style: TextStyle(
+                              fontSize: 20.0,
+                              fontWeight: FontWeight.w600,
+                            ),
+                        ),
+                    ),
+                  ],
+                ),
+                SizedBox( height: 10.0, ),
                 TableCalendar(
                   initialCalendarFormat: CalendarFormat.month,
                   calendarStyle: CalendarStyle(
