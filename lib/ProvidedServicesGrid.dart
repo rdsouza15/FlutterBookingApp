@@ -12,116 +12,55 @@ int _selectedIndex = 0;
 * The selected service should set a state for the caller */
 class ProvidedServicesGrid extends StatelessWidget{
 
+  // All services are listed here
+  final List<String> servicesList = [
+    "Physio",
+    "Speech",
+    "Massage",
+    "PSW",
+  ];
+
   @override
   Widget build( BuildContext context ){
 
-    return Container(
-        height: 180.0,
-        child: GridView.count(
-          crossAxisCount: 2,
-          childAspectRatio: 2.5,
-          padding: const EdgeInsets.all(10.0),
-          mainAxisSpacing: 10.0,
-          crossAxisSpacing: 10.0,
-          children: <Widget>[
-            FlatButton(
-              color: Colors.orange,
-              padding: EdgeInsets.symmetric(
-                  horizontal: 50.0, vertical: 20.0),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0),
-                side: BorderSide(
-                  color: _selectedIndex == 1
-                      ? Colors.transparent
-                      : Color(
-                      0xFFFFC05F), // TODO fix this with stateful widget
-                ),
-              ),
-              // color: _selectedIndex == 0 ? Color(0xFFFFC05F) : null,
-              child: Text("Physio",
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.w600,
-                  )),
-              onPressed: () {
-                _selectedIndex = 0;
-              },
-            ),
-            FlatButton(
-              padding: EdgeInsets.symmetric(
-                  horizontal: 50.0, vertical: 20.0),
-              color: Color(0xFFFFC05F),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0),
-                side: BorderSide(
-                  color: _selectedIndex == 1
-                      ? Colors.transparent
-                      : Color(
-                      0xFFFFC05F), // TODO fix this with stateful widget
-                ),
-              ),
-              // color: _selectedIndex == 0 ? Color(0xFFFFC05F) : null,
-              child: Text("Speech",
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.w600,
-                  )),
-              onPressed: () {
-                _selectedIndex = 0;
-              },
-            ),
-            FlatButton(
-              color: Color(0xFFFFC05F),
-              padding: EdgeInsets.symmetric(
-                  horizontal: 30.0, vertical: 20.0),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0),
-                side: BorderSide(
-                  color: _selectedIndex == 1
-                      ? Colors.transparent
-                      : Color(
-                      0xFFFFC05F), // TODO fix this with stateful widget
-                ),
-              ),
-              // color: _selectedIndex == 0 ? Color(0xFFFFC05F) : null,
-              child: Text("Massage",
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.w600,
-                  )),
-              onPressed: () {
-                _selectedIndex = 0;
-              },
-            ),
-            FlatButton(
-              color: Color(0xFFFFC05F),
-              padding: EdgeInsets.symmetric(
-                  horizontal: 50.0, vertical: 20.0),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0),
-                side: BorderSide(
-                  color: _selectedIndex == 1
-                      ? Colors.transparent
-                      : Color(
-                      0xFFFFC05F), // TODO fix this with stateful widget
-                ),
-              ),
-              // color: _selectedIndex == 0 ? Color(0xFFFFC05F) : null,
-              child: Text("PSW",
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.w600,
-                  )),
-              onPressed: () {
-                _selectedIndex = 0;
-              },
-            ),
-          ],
+    return GridView.builder(
+        scrollDirection: Axis.vertical,
+        shrinkWrap: true,
+        itemCount: servicesList.length,
+        padding: const EdgeInsets.all(10.0),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            childAspectRatio: 2.5,
+            mainAxisSpacing: 10.0,
+            crossAxisSpacing: 10.0,
         ),
+        itemBuilder: ( context, index ) {
+          return FlatButton(
+            color: _selectedIndex == index ? Colors.orange : Colors.grey,
+            padding: EdgeInsets.symmetric(
+                horizontal: 40.0, vertical: 20.0),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20.0),
+              side: BorderSide(
+                color: _selectedIndex != index
+                    ? Colors.transparent
+                    : Colors.black, // TODO fix this with stateful widget
+              ),
+            ),
+            // color: _selectedIndex == 0 ? Color(0xFFFFC05F) : null,
+            child: Text(servicesList[index],
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.w600,
+                )
+              ),
+            onPressed: () {
+              _selectedIndex = index;
+              print( _selectedIndex ); // TODO remove print statem
+            },
+          );
+        }
     );
   }
 }

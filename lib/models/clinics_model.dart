@@ -18,6 +18,7 @@ class Clinic {
   // Store a list of the clinics here.. to be qureied by other parts of the app
   final List<Clinic> clinics = [
 
+    // Ryan
     Clinic(
       person: "Ryan",
       city: "Brampton",
@@ -26,6 +27,7 @@ class Clinic {
       imageUrl: 'assets/images/nuerofit.jpeg'
     ),
 
+    //Sante
     Clinic(
       person: "Sante",
       city: "Orangeville",
@@ -34,6 +36,7 @@ class Clinic {
       imageUrl: 'assets/images/nuerofit.jpeg'
     ),
 
+    // Oliva
     Clinic(
       person: "Olivia",
       city: "Brampton",
@@ -42,6 +45,7 @@ class Clinic {
       imageUrl: 'assets/images/nuerofit.jpeg'
     ),
 
+    // Tacky
     Clinic(
       person: "Tacky",
       city: "Brampton",
