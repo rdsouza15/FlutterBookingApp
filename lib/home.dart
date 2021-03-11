@@ -16,6 +16,7 @@ import 'package:flutter_app/models/clinics_model.dart';
 
 /* import map locations */
 import 'src/locations.dart' as locations;
+import 'package:flutter_app/MapsManager.dart';
 
 /* TODO MAKE THIS A STATEFUL WIDGET */
 class HomePage extends StatelessWidget {
@@ -142,18 +143,7 @@ class HomePage extends StatelessWidget {
                           ))),
                 ),
                 Divider(height: 40.0),
-                SizedBox(
-                    width: 100,
-                    height: 500,
-                    child: GoogleMap(
-                        mapType: MapType.normal,
-                        initialCameraPosition: CameraPosition(
-                            target: const LatLng(
-                                43.71889356929494, -79.72247294477522),
-                            zoom: 2),
-                        gestureRecognizers: Set()
-                          ..add(Factory<PanGestureRecognizer>(() =>
-                              PanGestureRecognizer())))), // Sized Box For Map
+                MapsManager(),
                 SizedBox(height: 10.0), // Padding between map and service icon
                 Divider(height: 40.0),
                 TherapistsCarousel(),
@@ -180,6 +170,7 @@ class HomePage extends StatelessWidget {
                       ),
                     ),
                     SizedBox( width: 10.0, ),
+                    // TODO when pressed open a chat screen (lots of things to consider here blyat!)
                     FlatButton(
                       minWidth: 175.0,
                       color: Colors.orange,
@@ -198,6 +189,7 @@ class HomePage extends StatelessWidget {
                     ),
                   ],
                 ),
+                Divider(height: 40.0),
                 SizedBox( height: 10.0, ),
                 CalendarManager(),
               ]),

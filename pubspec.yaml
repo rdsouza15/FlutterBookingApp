@@ -33,7 +33,9 @@ dependencies:
   english_words: ^3.1.5
 
   # Adding google maps to app
-  google_maps_flutter: ^1.0.3
+#  google_maps_flutter: ^2.0.1
+  google_maps_flutter:
+  google_maps_webservice:
 
   # add locations to the google map
   http: ^0.12.0+1
@@ -44,6 +46,10 @@ dependencies:
 
   # import font awesome for icons
   font_awesome_flutter: ^8.5.0
+
+  # Firebase for clinic locations, user info, etc.
+  cloud_firestore: ^1.0.1
+#  firebase_database: ^6.1.0
 
 dev_dependencies:
   pedantic: ^1.9.0

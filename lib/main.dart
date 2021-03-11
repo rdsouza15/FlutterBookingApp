@@ -2,18 +2,31 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:english_words/english_words.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+//firebase
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 /* import map locations */
-import 'src/locations.dart' as locations;
+// import 'src/locations.dart' as locations;
 
 /* import HomePage */
 import 'home.dart';
 
 /* Main entry point into app */
-void main() => runApp(MyApp());
+// void main() => runApp(MyApp());
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize as a Firebase App
+  final Future<FirebaseApp> _initialization = Firebase.initializeApp();
+
+  runApp(MyApp());
+}
+
 
 /*class MyApp extends StatelessWidget {
   @override
@@ -35,31 +48,31 @@ class MyApp extends StatefulWidget {
 /// This is the controller for the Main app view
 class _MyAppState extends State<MyApp> {
 
-  // init tree map
-  final Map<String, Marker> _markers = {};
-
-  Future<void> _onMapCreated( GoogleMapController controller ) async {
-    final googleOffices = await locations.getGoogleOffices();
-
-    setState( () {
-      _markers.clear();
-
-      for( final office in googleOffices.offices ){
-        final marker = Marker(
-          markerId: MarkerId( office.name ),
-          position: LatLng( office.lat, office.lng ),
-          infoWindow: InfoWindow(
-            title: office.name,
-            snippet: office.address,
-          ),
-        );
-
-        _markers[office.name] = marker;
-
-      }
-    });
-
-  }
+  // // init tree map
+  // final Map<String, Marker> _markers = {};
+  //
+  // Future<void> _onMapCreated( GoogleMapController controller ) async {
+  //   final googleOffices = await locations.getGoogleOffices();
+  //
+  //   setState( () {
+  //     _markers.clear();
+  //
+  //     for( final office in googleOffices.offices ){
+  //       final marker = Marker(
+  //         markerId: MarkerId( office.name ),
+  //         position: LatLng( office.lat, office.lng ),
+  //         infoWindow: InfoWindow(
+  //           title: office.name,
+  //           snippet: office.address,
+  //         ),
+  //       );
+  //
+  //       _markers[office.name] = marker;
+  //
+  //     }
+  //   });
+  //
+  // }
 
   @override
   Widget build(BuildContext context) {
