@@ -17,12 +17,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'home.dart';
 
 /* Main entry point into app */
-// void main() => runApp(MyApp());
 void main() async{
-  WidgetsFlutterBinding.ensureInitialized();
 
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   // Initialize as a Firebase App
-  final Future<FirebaseApp> _initialization = Firebase.initializeApp();
+  // final Future<FirebaseApp> _initialization = Firebase.initializeApp();
 
   runApp(MyApp());
 }

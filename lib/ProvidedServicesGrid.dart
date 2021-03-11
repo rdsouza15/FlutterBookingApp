@@ -3,14 +3,20 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_app/home.dart';
 import 'package:flutter_app/models/clinics_model.dart';
 
-// Initial selected index .. this will set the selected state for the rest of the app
-// TODO use cleaner way to get and set this value
-int _selectedIndex = 0;
-
 /* A class to manage all the services provided in the app
 * ( Physio, Massage, Speech, PSW ) and display them in a Grid
 * The selected service should set a state for the caller */
-class ProvidedServicesGrid extends StatelessWidget{
+class ProvidedServicesGrid extends StatefulWidget{
+
+  @override
+  State<StatefulWidget> createState() {
+    return _ProvidedServicesGridState();
+  }
+}
+
+class _ProvidedServicesGridState extends State<ProvidedServicesGrid>{
+
+  int _selectedIndex = 0;
 
   // All services are listed here
   final List<String> servicesList = [
@@ -21,7 +27,7 @@ class ProvidedServicesGrid extends StatelessWidget{
   ];
 
   @override
-  Widget build( BuildContext context ){
+  Widget build(BuildContext context) {
 
     return GridView.builder(
         scrollDirection: Axis.vertical,
@@ -29,10 +35,10 @@ class ProvidedServicesGrid extends StatelessWidget{
         itemCount: servicesList.length,
         padding: const EdgeInsets.all(10.0),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            childAspectRatio: 2.5,
-            mainAxisSpacing: 10.0,
-            crossAxisSpacing: 10.0,
+          crossAxisCount: 2,
+          childAspectRatio: 2.5,
+          mainAxisSpacing: 10.0,
+          crossAxisSpacing: 10.0,
         ),
         itemBuilder: ( context, index ) {
           return FlatButton(
@@ -54,10 +60,11 @@ class ProvidedServicesGrid extends StatelessWidget{
                   fontSize: 20.0,
                   fontWeight: FontWeight.w600,
                 )
-              ),
+            ),
             onPressed: () {
-              _selectedIndex = index;
-              print( _selectedIndex ); // TODO remove print statem
+              setState(() {
+                _selectedIndex = index;
+              });
             },
           );
         }
